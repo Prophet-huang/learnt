@@ -1,0 +1,29 @@
+数据类型的映射
+从SQL到Java数据类型映射的JDBC规范
+SQL类型	Java类型
+CHAR	java.lang.String
+VARCHAR	java.lang.String
+LONGVARCHAR	java.lang.String
+NUMERIC	java.math.BigDecimal
+DECIMAL	java.math.BigDecimal
+BIT	boolean
+TINYINT	byte
+SMALLINT	short
+INTEGER	int
+BIGINT	long
+REAL	float
+FLOAT	double
+DOUBLE	double
+BINARY	byte[]
+VARBINARY	byte[]
+LONGVARBINARY	byte[]
+DATE	java.sql.Date
+TIME	java.sql.Time
+TIMESTAMP	java.sql.Timestamp
+Datetime   	java.sql.Timestamp
+BLOB	java.sql.Blob
+CLOB	java.sql.Clob
+Array	java.sql.Array
+REF	java.sql.Ref
+Struct	java.sql.Struct
+注：这种类型匹配不是强制性标准，特定的JDBC厂商可能会改变这种类型匹配。例如Oracle中的DATE类型是包含时分秒，而java.sql.Date仅仅支持年月日。
