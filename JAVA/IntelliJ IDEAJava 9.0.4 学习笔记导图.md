@@ -2,9 +2,13 @@
 
 笔记以 idea 中创建项目的形式书写，该文档类似一个目录。
 
-## 该文件包含 Java 最基础的语法
+JVM + 核心类库 = JRE
 
-### 文件名： JavaBasicGrammar
+JRE + java开发工具（javac.exe/jar.exe) = JDK
+
+# 该文件包含 Java 最基础的语法
+
+## 文件名： JavaBasicGrammar
 
 #### 循环： 
 
@@ -36,17 +40,21 @@ Java 方法 Math.max()介绍
 
 **重载 ：方法名相同，方法参数的类型和个数不同。**
 
-传参注意事项
+#### 传参注意事项：
 
 方法传递数组
 
+引用类型参数的传递，调用方的变量，和接收方的参数变量，指向的是同一个对象。双方任意一方对这个对象的修改，都会影响对方（因为指向同一个对象嘛）。
+
+
+
 ------
 
-## 该文件包含 Java oop 面向对象
+# 该文件包含 Java oop 面向对象
 
 面向过程POP：
 
-- 把要解决的问题梳理出来，**线性顺序**的去解决问题，适用于解决单个对象问题（每个人都有自己独特的问题）。
+- 把要解决的问题梳理出来，**线性顺序**的去解决问题，适用于解决单个对象问题（因为每个人都有自己独特的问题）。
 - 集体服务于个人。
 - 普遍人认为集体是为个人而存在的，而且集体的福利和力量的发挥是为了个人的利益的。
 
@@ -62,7 +70,7 @@ OOP三大特性：封装	继承	多态
 
 
 
-### 文件名：dogManagerOOPOne
+## 文件名：dogManagerOOPOne
 
 通过记录狗状态来介绍面向对象
 
@@ -78,7 +86,7 @@ OOP三大特性：封装	继承	多态
 
 空指针介绍
 
-### 文件名：dogManagerOOPTwo
+## 文件名：dogManagerOOPTwo
 
 public	private
 
@@ -88,7 +96,7 @@ public	private
 
 to String()	方法
 
-### 文件名：dogManagerOOPThree
+## 文件名：dogManagerOOPThree
 
 构造方法：写构造方法不需要返回值，不是空返回值因此是没有类型的，通常情况下需要一个无参数的构造，来满足初始化时不填参数。
 
@@ -98,7 +106,7 @@ to String()	方法
 
 垃圾回收的问题
 
-### 文件名：aboutStaticOOPUpFour
+## 文件名：aboutStaticOOPUpFour
 
 static（静态的修饰词）介绍：静态属性基于类。
 
@@ -110,7 +118,7 @@ static（静态的修饰词）介绍：静态属性基于类。
 
 单例设计模式 ：再外部只能调用该类内部事先创建好的对象，不能在外部创建新的该类对象。
 
-### 文件名：animalManagerOOPDownOne	
+## 文件名：animalManagerOOPDownOne	
 
 #### 继承 extends:
 
@@ -124,7 +132,7 @@ super：在子类中虽然重写了但还要用父类的属性，这时用 super
 
 final：可修饰：类、方法、常量。类不可继承，方法可继承但不能重写，常量可继承但不能修改。
 
-### 文件名：animalManagerOOPDownTwo
+## 文件名：animalManagerOOPDownTwo
 
 Abstract 修饰抽象
 
@@ -132,7 +140,7 @@ Abstract 修饰抽象
 
 抽象方法：没有方法体，被继承后必须重写
 
-### 文件名：humanOOPDownThree
+## 文件名：humanOOPDownThree
 
 接口：
 
@@ -145,15 +153,253 @@ Abstract 修饰抽象
 - 本质是一个继承或实现，类或接口，的子类的一个实例对象，只不过这个对象是匿名的。
 - 场景：常用于该方法只会被调用当下这一次
 
-### 文件名：huaMuLanOOPDownFour
+## 文件名：huaMuLanOOPDownFour
 
 多态：
 
-- 向上转型：子类引用的对象转换为父类类型称为向上转型。通俗地说就是是将子类对象转为父类对象。此处父类对象可以是接口。转型后，只能使用父类的属性（子类自己的特性用不了），如果父类是接口使用的还是子类的属性(子类自己的特性用不了)。
-- 向下转型：是建立再向上转型的基础上，父类引用的对象转换为子类类型称为向下转型。（需要强转）
+- 向上转型：子类引用的对象转换为父类类型称为向上转型。通俗地说就是是将子类对象转为父类对象。此处父类对象可以是接口。转型后，只能使用父类的属性（子类自己的特性用不了），如果父类是接口使用的还是子类的属性(借口中的行为没方法体)。父类 名=new子类对象
+- 向下转型：是建立再向上转型的基础上，父类引用的对象转换为子类类型称为向下转型。（需要强转）子类 名 =（强转子类）向上转型的对象名 
 
 ------
 
-## 该文件包含 Java API 和进阶功能（不包含新特性）
+# 该文件包含 Java API 和进阶功能（不包含新特性）
 
 object 是所有类的父类
+
+## 文件名：javaApiOne
+
+scanner类：一个简单的文本扫描器，可以使用正则表达式解析原始类型和字符串。 
+
+------
+
+
+
+### number：是抽象类（abstract），所有包装类的父类。
+
+包装类优势：面向对象的方式把基础类型包装成对象，再调用相应类中的计算方法去完成计算。省去了我们调用基础内置数据类型自己写计算函数。
+
+内置数据类型：byte、int、long、double 等。
+
+包装类：Integer、Long、Byte、Double、Float、Short
+
+#### 装箱与拆箱：
+
+装箱：内置数据类型被当作对象使用的时候（装箱），就可以调用方法了。
+
+拆箱：把对象，像内置类那样，直接使用符号进行运算。
+
+
+
+------
+
+Math类：包含执行基本数字运算的方法，如基本指数，对数，平方根和三角函数。 
+
+
+
+------
+
+### 随机数
+
+Random类：生成伪随机数。可设定生成随机数的界限以及宽度（数字的总位数）。
+
+SecureRandom类：提供了一个密码强的随机数生成器，继承于 random 类。
+
+**ThreadLocalRandom**：继承于 random 类 ，最主要的作用 解决 random 类中一些 方法无法设置两边边界的问题。该方法是个静态方法不能直接创建对象（单例设计模式） 但可以调用该类中 current(); 去使用该类的其他方法。
+
+
+
+------
+
+### 时间
+
+Date类：分配当前的时间，或给定一个linux时间戳去分配（因为以毫秒不是秒计算，使用时别忘*1000否则会在1970年）。
+
+DateForamt类：是一个用于日期/时间格式化子类的抽象类，它以语言无关的方式格式化和分析日期或时间。
+
+SimpleDateFormat类：继承于 DateFormat 类，用于以区域设置敏感的方式格式化和解析日期，该类提供很多常量用于格式化 。
+
+Calendar类：可以为在某一特定时刻和一组之间的转换的方法，提供大量关于时间的字段用于操纵该日历字段 。这是个抽象类，但他提供静态方法供使用。
+
+GregorianCalendar类：继承Calendar类，提供了世界上大多数国家使用的标准日历系统。
+
+
+
+------
+
+### maven库和junit单元测试框架在企业中的用途
+
+junit单元测试框架：又称模块测试。
+
+
+
+------
+
+### 字符串
+
+String类：字符串类，提供方法操作字符串。Java程序中的所有字符串文字（例如`"abc"` ）都被实现为此类的实例。
+
+```java
+String.format - 使用指定的格式字符串和参数返回格式化的字符串。(可解决在 仅限格式化输出时 小数的位数)
+```
+
+**注意:**字符串不变; 它们的值在创建后不能被更改。 字符串缓冲区支持可变字符串。  因为String对象是不可变的，它们可以被共享。因此再使用String类时，往字符串中追加字符串，实际上是又新建一个和源对象名字相同的新对象，但旧对象还是存在的，如大量操作会损失大量的性能。
+
+StringBuilder类：为字符串插入和追加解决上述问题，该类在多线程中无法同步，但速度快。
+
+StringBuffer类：解决StringBuilder，线程同步问题。
+
+```bash
+# 需要说明的是，CharSequence就是字符序列(还是个接口String类实现了它)，String, StringBuilder和StringBuffer本质上都是通过字符数组实现的！
+
+# 源码中 String 类的 equals 的方法继承于 Object 类,Object 类中的 equals 方法只对比对象的地址,String 类的 equals 的方法虽然重写但仅支持 String 类的对象去对比其内容字符串是否相同
+
+
+```
+
+ 
+
+------
+
+### 异常
+
+Throwable类：是Java语言中所有错误和异常的超类。
+
+Error类：错误类，是Throwable的直接子类。
+
+Exception类：异常类，是Throwable的直接子类。
+
+```bash
+# Error类的使用场景：  
+是指程序无法处理的错误，表示应用程序运行时出现的重大错误。(很难通过完善代码修复)例如jvm运行时出现的, OutOfMemoryError以及Socket编程时出现的端口占用等程序无法处理的错误。
+
+# Exception类的使用场景:
+ * 异常可分为运行时异常跟编译异常
+ * <1> 运行时异常：即RuntimeException及其之类的异常。这类异常在代码编写的时候不会被编译器所检测出来，是可以不需要被捕获，
+ * 但是程序员也可以根据需要进行捕获抛出。常见的RUNTimeException有：NullPointException（空指针异常），
+ * ClassCastException（类型转换异常），IndexOutOfBoundsException（数组越界异常）等。
+ *
+ * <2> 编译异常：RuntimeException以外的异常。这类异常在编译时编译器会提示需要捕获，如果不进行捕获则编译错误。
+ * 常见编译异常有：IOException（流传输异常），SQLException（数据库操作异常）等。
+ *
+ * 注意：异常和错误的区别：异常能被程序本身可以处理，错误是无法处理。
+```
+
+RuntimeException类：继承于Exception类，各种运行时异常的超类，多出现语法没有错误（代码可编译）但运行时出错。
+
+ReflectiveOperationException类：继承于Exception类，各种反射异常的超类（java的反射是指程序在运行期间可以拿到对象的的所有信息）。
+
+![](E:\learnt\JAVA\异常跟错误都继承于Throwable类.png)
+
+
+
+#### 异常处理
+
+```java
+// 异常处理两种办法：
+
+// try catch finally -捕获异常 ->使用场景：捕获异常并个人处理彻底解决问题，其他使用者使用没问题。
+try() {
+    // 有异常的程序代码
+} catch(异常类型 异常变量名) {
+	// 调用异常方法，或根据需求要写的代码    
+} finally{
+    /* 
+    finally 代码块无论是否捕获成功异常都会执行，即使在 catch 代码块中添加 return 关键字，并捕获异常成功也会先执行 catch 代码块中其他内容，再执行 finally 代码块的内容，最后执行 returen ，如果 finally 代码块中恰好也有return ，那 catch 里的 returen 毛用没有。
+    因此，finally 代码块适合运行清理等善后代码。
+    */
+}
+
+// throws throw -抛出异常并声明异常 ->使用场景：抛出异常并提示所有使用者，并让 JVM 自行解决。
+public void demo() throws 异常类型，可多个{
+    throw new 异常类型对象
+}
+```
+
+自己编写的类继承各种异常类，可自定义异常。
+
+IllegalArgumentException：非法或不正确的参数异常
+
+
+
+------
+
+###  
+
+### 文件	&	输入输出流(File 	&	I/O Stream)
+
+#### 文件
+
+文件(file) 	文件夹(folder) 	文件路径(file path) 	目录(directory)
+
+绝对路径  (absolut path)	相对路径  (relative path)
+
+Windows10 的文件路径的书写方式与 Linux 的不同：
+
+- UNIX根目录的磁盘驱动器说明符"/"
+- Windows UNC路径名的"\\"
+
+File 类：文件和目录路径名的抽象表示。 并提供一些方法进行操作。
+
+
+
+#### 输入输出流
+
+##### 介绍
+
+Java.io 包几乎包含了所有操作输入、输出需要的类。
+
+I/O 流表示输入源或输出目标。一个流可以表示许多不同类型的源和目标，包括磁盘文件、设备、其他程序和内存阵列。
+
+Input : 输入       Output: 输出
+
+判断输入还是输出要站在操作目标的角度上。
+
+因我们操作的目标是 Java program(程序)：
+
+- 从一个数据源读取数据 ———— 输入流： InputStream
+- 向一个目标写入数据 ———— 输出流： OutputStream
+
+![](E:\learnt\JAVA\IOStream\Reading information into a program.gif)
+
+读取输入
+
+
+
+![](E:\learnt\JAVA\IOStream\Writing information from a program.gif)
+
+写入输出
+
+
+
+##### 类介绍
+
+byteStreams : 字节流
+程序使用字节流来执行 8 位字节的输入和输出。
+
+字符流在 AIP 中属于 IO 包，但不在 InputStream 和 OutputStream 抽象类中.
+字符流只能使用文字类的文件。
+
+字符流和字节流是可以互相转换的使用：InputStreamReader 和 OutputStreamWriter ,
+这两个类是没有缓冲区的，建议用 Buffered 类 包装一下再去使用。
+
+缓存区：普通字节流或字符流读取一个字符的字节编码，进行操作，将多个字符的字节编码打包成数组存入缓存，当数组存满时在一起操作。
+
+Java 提供带缓存区的类(带Buffered)：
+
+* 装饰设计模式：（普通套餐的升级）
+* 使用装饰设计模式的类，需要有这种类的基础类。（这种类算是基础类的 VIP 版本）
+* 有四个缓冲流类用于包装非缓冲流：
+* BufferedInputStream并 BufferedOutputStream创建缓冲字节流，而 BufferedReader创建 BufferedWriter缓冲字符流。
+
+
+
+![](E:\learnt\JAVA\IOStream\IOStream.png)
+
+
+
+------
+
+
+
+### 多线程
+
