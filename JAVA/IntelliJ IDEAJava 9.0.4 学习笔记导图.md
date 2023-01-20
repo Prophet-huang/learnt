@@ -44,6 +44,8 @@ variable x = (expression) ? value if true : value if false
 
 #### 方法
 
+方法只能在方法中调用不能呢个在类里调用
+
 **重载 ：方法名相同，方法参数的类型和个数不同。**
 
 #### 传参注意事项：
@@ -120,7 +122,7 @@ static（静态的修饰词）介绍：静态属性基于类。
 
 静态变量
 
-静态方法
+静态方法 ：类层面的方法，可由类之接调用。
 
 静态代码块：和类一起完成初始化，只加载一次。
 
@@ -177,7 +179,7 @@ Abstract 修饰抽象
 
 * 继承
 * 重写
-* 创建对象时父类 new 子类{有逼格的说法是：父类引用指向子类对象}没有向上的子类对象无法实现向下
+* 创建对象时父类 new 子类`(有逼格的说法是：父类引用指向子类对象)`没有向上的子类对象无法实现向下
 
 
 
@@ -624,7 +626,7 @@ Java 中的锁总共可分为两类：公平锁和非公平锁。
 ###### synchronized  同步锁
 
 - 写代码时发现 synchronized 是关键字，他基于 JVM 层面（随着版本更迭可能性能会变强）。
-- 使用时需要新建并传入 Object 对象或变量。(相当于一个判断机制)
+- 使用时需要新建并传入 Object 对象。(相当于一个判断机制)
 - 同步代码块：线程 run() 方法中需要上锁的内容。
 - 同步方法：synchronized 修饰的方法
 - 非公平锁
@@ -790,4 +792,407 @@ public class ThradB implements Runnable {
 
 
 
-### 集合框架
+### 集合 
+
+数组可以存基础类型也可以存储对象，但有一下致命缺陷催生了集合诞生这也是集合最直观的优势：
+
+- 数组初始化后大小不可变，但集合可以自动扩容。
+- 数组只能按照索引顺序存取，但集合可以通过其自身的方法(当然使用索引也可以)不借助索引完成存取操作。
+
+#### 集合家族结构 `Collection` `Map`
+
+Java标准库自带的`java.util`包提供了集合类：`Collection`，它是除`Map`外所有其他集合类的根接口。Java的`java.util`包主要提供了以下三种类型的集合：
+
+- `List`：一种有序列表的集合，例如：按索引排列的`Student`的`List`；
+- `Set`：一种保证没有重复元素的集合，例如：所有无重复名称的`Student`的`Set`；
+- `Map`：一种通过键值（key-value）查找的映射表集合，例如：根据`Student`的`name`查找对应`Student`的`Map`。
+
+![](E:\learnt\JAVA\Collections  Framework\Collection.png)
+
+
+
+![](E:\learnt\JAVA\Collections  Framework\Map.png)
+
+
+
+Java 集合设计有两大特点：
+
+- 接口与实现类分离，结构脉络有条理。
+- 引入泛型，可规定类型。
+
+
+
+由于Java的集合设计非常久远，中间经历过大规模改进，我们要注意到有一小部分集合类是遗留类，不应该继续使用：
+
+- `Hashtable`：一种线程安全的`Map`实现(里面有很多同步方法，单线程情况下比`HashMap`要慢很多),被 Jdk1.5提供的 **`ConcurrentHashMap`**(支持检索的完全并发性和更新的高预期并发性的哈希表。 该类符合与`Hashtable`)相同的功能规范，并包括与`Hashtable`每种方法对应的方法的`Hashtable`  。)所替代 ；(ps：之前有傻逼面试官我问过我`HashMap`与`Hashtable`的区别，我当时一口咬定没有`Hashtable` 这种东西，之前毕竟第一遍学`Java`。这种淘汰掉东西，我压根没看，哈哈哈。一个合格的开发者不应该用`Hashtable`这种淘汰货，既然用不到那比啥？)
+- `Vector`：一种线程安全的`List`实现,但是大多数情况下不使用Vector，因为操作Vector效率比较低；
+- `Stack`：基于`Vector`实现的`LIFO`的栈。
+
+还有一小部分接口是遗留接口，也不应该继续使用：
+
+- `Enumeration<E>`：已被`Iterator<E>`取代。
+
+Java集合使用统一的`Iterator`遍历，尽量不要使用遗留接口。因此 `Collection`接口 继承于`Iterable` 接口。
+
+
+
+#### Collection List
+
+有序列表集合的根接口，本质上是更加灵活的数组。
+
+**元素存储特色：** 
+
+- 元素有特定顺序
+- 元素可以重复，实际对象层面而非地址层面。
+- 元素可以是`null`,而且可重复
+- 元素插入时可指定位置，但不能超过整个集合的宽度
+- 元素可以通过整数索引访问并搜索。
+
+**注意：**`List` 自己提供了一个 `List.of()` 这个静态方法让你可以使用这借口创建集合，但无论在性能方面还是规范方面都不建议使用该接口。
+
+
+
+##### ArrayList
+
+集合界的扛把子使用特频。除了实现`List`接口之外，该类还提供了一些方法来处理内部用于存储列表的数组的大小。  （这个类大致相当于`Vector` ，除了`ArrayList`是不同步的。） 
+
+###### 常用方法
+
+```java
+boolean add(E e); // 将指定的元素追加到此集合列表的末尾。元素的类型可以根据自己设定的类型添加
+void add(int index,  E e); // 在此集合列表中的指定位置插入指定的元素。
+void clear(); // 从列表中删除所有元素。 此呼叫返回后，列表将为空。
+boolean contains(Object o); // 如果此列表包含指定的元素，则返回true 。
+get(int index); // 返回此列表中指定索引位置的元素。
+set(int index, E e); // 用指定的元素替换此列表中指定位置的元素。
+int indexOf(Object o); // 返回此列表中指定元素的第一次出现的索引，如果此列表不包含元素，则返回-1。
+boolean isEmpty(); // 如果此列表不包含元素，则返回 true ,反之 false。
+remove(int index); // 删除该列表中指定位置的元素,该方法在使用在 Integer 类型上，会出现索引和元素之间混乱，会自动识别为索引而不是元素。
+boolean removeAll(Collection<?> c); // 从此列表中删除指定集合中包含的所有元素
+boolean retainAll(Collection<?> c); // 从此列表中删除其中不包含在指定集合中的所有元素。
+int size(); // 返回此列表中的元素数, 形式和数组宽度的 length 关键字相同，但是 size() 是方法。
+List<E> subList(int fromIndex,int toIndex); // 返回指定的fromIndex 和 toIndex 之间的列表部分的元素。fromIndex - 子列表的低端点（包含）toIndex - 子列表的高端点（不包含）
+toArray(); // 以正确的顺序（从第一个到最后一个元素）返回一个包含此列表中所有元素的数组。如果想接收返回后的数组需要创建一个合集泛型相同类型的数组，去接收集合转化后的数组。设置数组的宽度可以用 size() 方法解决。
+
+```
+
+
+
+##### LinkedList
+
+`LinkedList` 链表实现了两个接口：`List` 与  `Deque`两个接口。该实现类不同步
+
+- `Deque` 接口(双端队列->两端都可进出->支持两端元素插入和移除的线性集合。)注意：该接口不能存null，但元素可重复。
+- 因此当`LinkedList`作为列表时可存Null，以及满足`List`的**部分**特性 。反之当作为队列或堆栈时要满足`Deque`特性。
+
+###### 特色花活链表：
+
+链表：储存的元素在链表中是一个节点的形式储存，而这个**节点:**不但储存元素还存储指向前一元素和后一个元素的地址信息。
+
+- 单向链表：节点中只存储后一元素指向的地址。
+- 双向链表：节点储存前一和后一元素指向的地址。**`LinkedList`使用双线链表**
+- ![](E:\learnt\JAVA\Collections  Framework\链表分为单向和双向 linkedList 双向.png)
+
+正因`LinkedList`舍弃了元素索引使用链表，使得其对元素的增删效率高于`ArrayList`，同时也因索引，使其查改效率不如`ArrayList`。
+
+**注意：linkedList.add(int index, Object item) 这个方法中的`int index`并不是链表的索引而是：一个逻辑索引 -> 实际上是从头开始迭代到达该节点之前需要迭代的次数，并不能提供搜索索引的能力。**
+
+![](E:\learnt\JAVA\Collections  Framework\arrayList  和linkedList 差异.png)
+
+ArrayDeque: 基于数组实现的线性双向队列，通常作为栈或队列使用，但是栈的效率不如LinkedList高。
+LinkedList: 基于链表实现的链式双向队列，通常作为栈或队列使用，但是队列的效率不如ArrayQueue高 。
+
+
+
+###### 常用方法
+
+```java
+void addFirst(E e); // 向队头插入元素。
+void addLast(E e);  // 将指定的元素追加到此列表的末尾。此方法相当于add(E) 。
+E element(); // 检索但不删除此列表的头（第一个元素）。NoSuchElementException - 如果此列表为空
+E void getFirst();// 返回此列表中的第一个元素。NoSuchElementException - 如果此列表为空
+E void getLast(); // 返回此列表中的最后一个元素。NoSuchElementException - 如果此列表为空
+boolean offerFirst(E e); // 向队头插入元素，如果插入成功返回true，否则返回false
+boolean offerLast(E e); // 向队尾插入元素，如果插入成功返回true，否则返回false
+// 检索的意思：找到并索取资料->在这里意思时查找元素找到并返回。
+E peek(); // 检索但不删除此列表的头（第一个元素）并返回。如果此列表为空则为null。
+E peekFirst(); // 检索但不删除此列表的第一个元素，并返回。如果此列表为空，则返回 null 。
+E peekLast(); // 检索但不删除此列表的最后一个元素，并返回。如果此列表为空，则返回 null 。
+E poll(); // 检索并删除此列表的头（第一个元素）。如果此列表为空则为null。
+E pollFirst(); // 检索并删除此列表的第一个元素，如果此列表为空，则返回 null 。
+E pollLast(); // 检索并删除此列表的最后一个元素，如果此列表为空，则返回 null 。
+E pop(); // 从此列表表示的堆栈中弹出一个元素。 换句话说，删除并返回此列表的第一个元素。此方法相当于removeFirst() 。NoSuchElementException - 如果此列表为空
+void push(E e); // 将元素推送到由此列表表示的堆栈上。 换句话说，在该列表的前面插入元素。此方法相当于addFirst(E) 
+E removeFirst(); // 从此列表中删除并返回第一个元素。
+E removeLast(); // 从此列表中删除并返回最后一个元素。
+boolean removeFirstOccurrence(Object o); // 删除此列表中指定元素的第一个出现（从头到尾遍历列表时）。 如果列表不包含该元素，则它不会更改。
+boolean removeLastOccurrence(Object o); // 删除此列表中指定元素的最后一次出现（从头到尾遍历列表时）。 如果列表不包含该元素，则它不会更改。
+
+
+```
+
+
+
+#### Iterator
+
+`iterator`迭代器接口，在`Iterable` 接口中被引用， `Collection`接口 继承于`Iterable` 接口。
+
+负责遍历集合中的元素。(遍历中也可提供修改)解决 `for i`循环书写复杂，`for each`循环无法修改集合元素问题。
+
+##### 使用迭代器：
+
+- 需要用到 public interface Iterator<E> 这是一个接口，只可引用没法给对象。
+- 因此 一个Enumeration（举例，枚举）可以被转换成一个Iterator通过使用Enumeration.asIterator()方法。
+- **使用迭代器修改元素内容时要注意：修改元素的泛型是包装类的情况下，集合中的元素不得有null否则会出现空指针异常。**
+
+##### 方法介绍
+
+```java
+// 迭代器的方法一共四个直接介绍了
+default void forEachRemaining(Consumer<? super E> action);// 对每个剩余元素执行给定的操作，直到所有元素都被处理或动作引发异常。
+
+boolean hasNext(); // 如果迭代具有更多元素，则返回true 。换句话说，如果true将返回一个元素而不是抛出异常，则返回true。
+
+E next(); // 返回迭代中的下一个元素。 NoSuchElementException - 如果迭代没有更多的元素
+
+default void remove(); 
+/*     
+* 从底层集合中删除此迭代器返回的最后一个元素（可选操作）。
+* 这种方法只能在每次调用next()时调用一次。
+* 异常
+* UnsupportedOperationException - 如果此迭代器不支持 remove操作
+* IllegalStateException - 如果 next方法尚未被调用，
+* 或 remove方法在最后一次调用 next方法之后已经被调用
+* 使用迭代器需要方法 hasNext() 和 next() 配合使用，
+* 因此不建议 for 循环中 嵌套 迭代器 使用，会出现异常（空指针问题）。
+*/
+```
+
+
+
+##### `for I`、for each`、`iterator`的区别、注意事项和分别用途：
+
+ * `for I` 适合数据的读取与修改
+ * `for each` 适合数据的读取（上升到对象引入也可修改）
+ * `Iterator` 适合数据的读取与修改
+ * `for each` 已经是一个小型的迭代器了，如果一定要修改集合的话可以使用迭代器，但不建议在`for each`中使用对象引用去修改元素。
+ * 如果是 `ArrayList` ，用三种方式遍历的速度是 `for>Iterator>forEach`，速度级别基本一致，一般都会用`for`或者`for each`，因为`Iterator`写法相对复杂一些
+ * 如果是 `LinkedList`，则三种方式遍历的差距很大了,数据量大时越明显，`Iterator>forEach>>>for`，推荐使用`foreach`或者`Iterator`，但 `Iterator` 更灵活，`forEach` 有限制。
+
+
+
+##### 案例
+
+```java
+public class IteratorApiTest {
+	public void TestOne() {
+        // 简单使用迭代器，并指定输出的元素在迭代输出对应时删除。
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add("Tim");
+        nameList.add("Jack");
+        nameList.add("Sam");
+        nameList.add("Jerry");
+        nameList.add("Bob");
+        nameList.add("Morty");
+        nameList.add("Rick");
+        System.out.println(nameList);
+
+        // 创建迭代器
+        Iterator<String> it = nameList.iterator();
+        // 遍历，并删除指定元素
+        while (it.hasNext()) {
+            String value = it.next();
+            if (value != "Sam") {
+                System.out.println(value);
+            } else {
+                it.remove();
+            }
+        }
+        System.out.println(nameList);
+	}
+}
+```
+
+
+
+#### Collection Set
+
+`Set` 集合通过 `java.util.Set` 接口在集合框架中实现。同样他继承 `collection `接口，因此也可以使用迭代器 `iterator`
+
+`Set`接口，由哈希表（实际为`HashMap`实例）支持,因此有以下特点：
+
+- 使用哈希表储存，就如同给每个元素上了身份证号(哈希码)，使得元素不依靠索引储存本身也没有链表或队列的关系，也就输出无序可言。
+- 也正因为每个元素都有自己的哈希码也使得，`HashSet`里存储的元素不可重复。
+- 更重要的是`Set`虽然继承`Collection`但底层使用`Map`实现，因此`Map`中的部分类可以转化`Set`中的对应的类来使用迭代器功能。
+-  `Set`  没有替换指定位置元素的方法，要修改元素需删除重新添加。
+
+`Set` 常用的实现类 `HashSet` 和 `LinkedHashSet` 。
+
+
+
+##### HashSet
+
+`HashSet` 类用于创建使用哈希表进行存储的集合。
+
+- 该类不同步。
+- 该类允许`null`值。
+- 可以自动扩容，初始容量为 16 ，扩容临界值为容量 0.75 ，也就是当储存 12  的位置时，自动扩容为原容量双倍，同时临界值也是新容量 0.75。
+- 初始容量是可以更改的详见构造：HashSet(int initialCapacity, float loadFactor）
+
+```java
+HashSet(int initialCapacity, float loadFactor）
+/* 参数：
+         initialCapacity - 初始容量
+         loadFactor - 负载因子（使用总容量的多少时扩容，总容量为一所占百分比转化小数）*/
+        
+boolean add(E e); // 将指定元素添加到此集合 如果此集合尚未包含指定的元素 返回 ture 如果此集合包含指定的元素（源码使用Objects.equals(e, e2)），不会有任何改变并返回 false
+
+void clear(); // 从此集合中删除所有元素。 此呼叫返回后，该组将为空。
+Object clone(); // 返回此 HashSet实例的浅拷贝：元素本身不被克隆。这个集合的浅拷贝
+boolean contains(Object o); // 如果此集合包含指定的元素，则返回true 。更正式地说，返回true当且仅当此set包含的元素e这样Objects.equals(o, e) 。
+boolean isEmpty(); // 如果此集合不包含元素（里面一个元素都没有），则返回 true 反之false。
+Iterator<E> iterator(); // 返回此集合中元素的迭代器。 元素没有特定的顺序返回。
+boolean remove(Object o); // 用于从该集合中删除指定的元素（如果存在）。一旦调用返回ture，此集合将不包含该元素。）
+int size(); // 返回此集合中的元素数（其基数）。
+
+```
+
+
+
+##### LinkedHashSet
+
+`LinkedHashSet`类是`HashSet`有序版本，引入双向链表。迭代有序，该类不同步。
+
+
+
+##### TreeSet
+
+Java TreeSet 类实现了使用树进行存储的 Set 接口。它继承了 AbstractSet 类并实现了 NavigableSet 接口。TreeSet 类的对象按升序存储。NavigableSet实现基于TreeMap
+
+特点：
+
+ - 只包含唯一元素，如 HashSet。
+
+ - 访问和检索时间非常快。
+
+ - 不允许空元素。
+
+ - 非同步的。
+
+ - TreeSet 是使用二叉搜索树实现的，它像红黑树一样是自平衡的。
+
+ - 只能允许那些可比较的泛型类型，这里的比较是通过 调用`Comparable<T>`接口的`compareTo()；`方法实现。
+
+   如果有特殊泛型需求：可实现`Comparable<T>`接口重写`comparaTo()`方法完成自定义操作，比较时大于为1 小于为-1 等于为0
+
+ - 元素有序且默认升序存储(自然排序)，这里的排序顺序是通过`Comparator<T>`接口的`compare()；`方法实现。
+
+   如有特殊排序需求：需自定义一个比较器，可实现`Comparator<T>`接口，重写`compare();`方法
+
+`public interface Comparable<T>` 每个类的对象强加一个整体排序。 这个排序被称为类的**自然排序**  ，类的`compareTo`方法被称为其**自然比较方法** 。(自然：更准些的说是对元素之间直接比较大小)
+
+`public interface Comparator<T>` 比较功能，对一些对象的集合施加了一个整体排序 。(更具有功能性的比较，例如元素之间长度谁长，谁能被5整除等)
+
+ 
+
+###### 独有方法
+
+说明：
+
+- TreeSet是有序的Set集合，因此支持add、remove、get等方法。
+- 和NavigableSet一样，TreeSet的导航方法大致可以区分为两类，一类时提供元素项的导航方法，返回某个元素；另一类时提供集合的导航方法，返回某个集合。
+- lower、floor、ceiling 和 higher 分别返回小于、小于等于、大于等于、大于给定元素的元素，如果不存在这样的元素，则返回 null。
+
+```java
+// 自定义排序以及泛型的构造
+TreeSet(Collection<? extends E> c) // 构造一个包含指定集合中的元素的新树集，根据其元素的 自然排序进行排序 。 
+TreeSet(Comparator<? super E> comparator)  // 构造一个新的，空的树集，根据指定的比较器进行排序。
+ // 方法
+E ceiling(E e); // 返回比给定元素大的那一堆元素里最小的那个元素，如果集合中有与给定元素相同的元素那么返回与给定相同元素，综上都没有返回 null。
+E higher(E e); // 返回这个集合中的最小元素严格大于给定的元素，如果没有这样的元素，则 null 。(和ceiling方法形容相同但没有等于的情况)
+
+E floor(E e); // 返回比给定元素小的那一堆元素里最大的那个元素，如果集合中有与给定元素相同的元素那么返回与给定相同元素，综上都没有返回 null。
+E lower(E e); // 返回该集合中最大的元素严格小于给定的元素，如果没有这样的元素，则 null 。(和floor方法形容相同但没有等于的情况)  
+
+Iterator<E> descendingIterator() // 以降序返回该集合中的元素的迭代器。
+
+E first();  // 返回此集合中当前的第一个（最低）元素。
+E last(); // 返回此集合中当前的最后（最高）元素。 
+
+E pollFirst(); // 检索并删除第一个（最低）元素，如果此集合为空，则返回 null 。  
+E pollLast(); // 检索并删除最后一个（最高）元素，如果此集合为空，则返回 null 。
+```
+
+
+
+#### Map
+
+`Interface Map<K,V>`：
+
+- `Map` 映射接口是单独一个家族，与  `Collection` 列表集合有本质区别。
+- 映射的一个 对象/元素 由两部分组成：键值（Key） 和 对应键的值（Value）。
+- 用来实现`Key`和`Vaule`是`Interface Map.Entry<K,V>`,该接口来自`java.util.Map.Entry`，因此`Entry` 是 `Map` 的内部接口。
+- 在映射中，基于 `key` 来对储存的元素进行 删改查(RUD) 是很有用的。
+- `Map` 不允许重复的`key`，但`vaule`可以有重复的值。
+- `Map` 不能被遍历，所以需要使用`keySet()`将`map`中的`key`转化，或`entrySet()`将`map`中`key+vaule`转化，的方法将其转换为 `Set`。
+
+
+
+##### HashMap
+
+`HashMap` 是 `Map` 主要实现类之一。
+
+`HashMap` 存储一个元素需要：一个键（Key） 和 对应的键的值（Value），说白了就算是你要存的东西（Value），要给配一个ID（Key）。
+
+`HashMap` 不是同步类。`Java HashMap` 类的初始默认容量为 16，负载因子为 0.75。可在构造中修改。
+
+依赖哈希码来储存因此：
+
+* `HashMap` 中每一个 `Key` 是唯一的（不能重复），一个集合中 `Key` 只允许有一个Null值。
+* `HashMap` 中 `Value` 可以为 `Null`。
+* `HashMap` 是无序的。
+
+###### 方法介绍
+
+```java
+V put(K key,V value); // 将指定的值与此映射中的指定键相关联。 （插入元素）如果插入的元素的 Key 和以储存元素的 Key 相同，那么以储存的元素将会被新插入的元素替代。修改键映射有专门的方法（不推荐这种方式）。
+void putAll(Map<? extends K,? extends V> m); // 指定一个 Map 复制到到调用方法的 Map。注意，如果两个 Map 的 Key 有相同的，将会被指定的 Map 替换。
+void putIfAbsent(); // 会先判断指定的键（key）是否存在，不存在则将键/值对插入到 HashMap 中。(value 的 Null 在这里判定为不存在，可以插)。
+
+V remove(Object key); // 从该 HashMap 中删除指定键的映射（如果key不存在返回 null，存在返回被删除的value）。
+boolean remove(Object key,Object value); //仅当指定的密钥当前映射到指定的值时删除该条目。
+void clear(); // 从这该集合中删除所有的映射。 此呼叫返回后，集合将为空。
+
+V get(Object key); // 指定键映射到的值，如果此映射不包含键的映射， null。
+V getOrDefault(Object key,V defaultValue); // 返回指定键映射到的值，如果此映射不包含键的映射，则返回 defaultValue(自己设置字段) 。
+
+V replace(K key,V value); // 替换指定键的条目,并返回被修改之前的value,键不存在或没有改变返回null。
+boolean replace(K key,V oldValue,V newValue); // 替换指定键的条目,修改成功返回true。
+
+// 转化Collection集合和set集合
+Collection<V> values(); // 虽然转化成 Collection 集合，但不支持add或addAll操作。
+Collection<String> collection = hashMap.values(); // 转化案例
+
+Set<K> keySet(); // 返回此HashMap中包含的键的Set视图。
+Set<Integer> keySet = hashMap.keySet(); // 转化案例
+
+Set<Map.Entry<K,V>> entrySet(); // 返回此HashMap中包含的映射的Set视图。
+Set<Map.Entry<Integer,String>> entrySet = hashMap.entrySet(); // 转化案例
+Iterator<Map.Entry<Integer,String>> iterator = hashMap.entrySet().iterator; // 只想遍历的写法
+
+```
+
+
+
+##### LinkedHashMap
+
+`HashMap` 的有序版本，双向链表实现有序。不同步。
+
+
+
+##### TreeMap
+
+底层红黑树实现的`Map`，注意是`Map`,有序但不同步，默认自然排序，修改排序顺序活排序元素参考上面介绍的`TreeSet`。
+
+默认的自然排序：只根据`key`来排序。
+
